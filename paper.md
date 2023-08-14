@@ -51,14 +51,14 @@ bibliography: paper.bib
 
 # Summary
 The pRT codebase has undergone significant updates since its initial publication in `@molliere2019` 
-A retrieval module combining the pRT spectrum calculations with the {\tt MultiNest} `[@feroz2008; @feroz2009; feroz2013]`and {\tt Ultranest} `[@buchner2014]` samplers has been included to streamline retrievals of exoplanet atmospheres in emission and transmission.
+A retrieval module combining the pRT spectrum calculations with the ``MultiNest` `[@feroz2008; @feroz2009; feroz2013]`and `Ultranest` `[@buchner2014]` samplers has been included to streamline retrievals of exoplanet atmospheres in emission and transmission.
 
 
 
 # Statement of need
-Multiple datasets can be included into a single retrieval, with each dataset receiving its own {\tt RadTrans} object used for the radiative transfer calculation, allowing for highly flexible retrievals where multiple spectral resolutions, wavelength ranges and even atmospheric models can be combined in a single retrieval.
+Multiple datasets can be included into a single retrieval, with each dataset receiving its own `RadTrans` object used for the radiative transfer calculation, allowing for highly flexible retrievals where multiple spectral resolutions, wavelength ranges and even atmospheric models can be combined in a single retrieval.
 Each dataset can also receive scaling factors (for the flux, uncertainties or both), error inflation factors and offsets.
-Several atmospheric models are built into the {\tt models} module, allowing for a wide range of P-T, cloud and chemistry parameterizations.
+Several atmospheric models are built into the `models` module, allowing for a wide range of P-T, cloud and chemistry parameterizations.
 These models are used to compute a spectrum $\vec{S}$, which is convolved to the instrumental resolution and binned to the wavelength bins of the data using a custom binning function to account for non-uniform bin sizes.
 The resulting spectrum compared to the data with flux $\vec{F}$ and covariance $\mathbf{C}$ in the likelihood function:
 \begin{equation}\label{eqn:loglike}
@@ -77,8 +77,8 @@ Including this adaptive mesh, our pressure grid contains a total of 154 layers w
 
 Finally, photometric data are fully incorporated into the retrieval process.
 As with spectroscopic data, a model is computed using a user-defined function.
-This model spectrum is then multiplied by a filter transmission profile from the SVO database using the {\tt species} package.
-This results in accurate synthetic photometry, which can be compared to the values specied by the user with the {\tt add_photometry} function.
+This model spectrum is then multiplied by a filter transmission profile from the SVO database using the `species` package `[@stolker2020]`.
+This results in accurate synthetic photometry, which can be compared to the values specied by the user with the `add_photometry` function.
 
 ## Correlated-k Implementation
 The correlated-k implementation was significantly improved in both accuracy and speed.
