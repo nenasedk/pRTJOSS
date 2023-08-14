@@ -50,8 +50,8 @@ bibliography: paper.bib
 ---
 
 # Summary
-The pRT codebase has undergone significant updates since its initial publication in `@Mollière:2019` 
-A retrieval module combining the pRT spectrum calculations with the {\tt MultiNest} `[@Feroz:2008; @Feroz:2014]`and {\tt Ultranest} `[@Buchner:20XX]` samplers has been included to streamline retrievals of exoplanet atmospheres in emission and transmission.
+The pRT codebase has undergone significant updates since its initial publication in `@molliere:2019` 
+A retrieval module combining the pRT spectrum calculations with the {\tt MultiNest} `[@feroz:2008; @feroz:2009; feroz:2013]`and {\tt Ultranest} `[@buchner:2014]` samplers has been included to streamline retrievals of exoplanet atmospheres in emission and transmission.
 
 
 
@@ -93,8 +93,9 @@ Once complete, the resulting grid is linearly interpolated back to the 16 $g$ po
 This fully deterministic process stabilized the log-likelihood calculations in the retrievals, and resulted in a 5$\times$ improvement in the speed of the c-k mixing function.
 
 # Using the Hansen distribution with EDDYSED
-The \ed cloud model from \citet{ackerman_precipitating_2001} is ...
-Trypically, it assumes a log-normal particle size distribution, where the geometric particle radius will vary throughout the atmosphere as a function of the vertical diffusion coefficient \kzz and the sedimentation fraction \fsed.
+The EddySED cloud model from `@ackermann:2019` is ...
+
+Typically, it  a log-normal particle size distribution is assumed where the geometric particle radius will vary throughout the atmosphere as a function of the vertical diffusion coefficient \kzz and the sedimentation fraction \fsed.
 Here, we will substitute the log-normal particle size distribution with the Hansen distribution, and will rederive the calculation for the particle radius as a function of \kzz and \fsed.
 
 We begin with a review of the \ed model: the distribution of the number of particles as a function of particle radius, $n(r)$ is approximated as a log-normal distribution with width $\sigma_{g}$ and characteristic geometric radius $r_{g}$.
@@ -160,7 +161,7 @@ Thus for a given \kzz, \fsed and $v_{e}$, we can find the effective particle rad
 However, in order to compute the cloud opacity, we still require the total particle count. 
 For a volume mixing ratio of a given species, $\chi_{i}$, we can integrate $n(r)$ to find $N$:
 \begin{equation}
- N = \frac{\chi_{i}}{\left(\bar{r}^{3}v_{e} -1\right)\left((2v_{e} -1\right)}
+ N = \frac{\chi_{i}}{\left(\bar{r}^{3}v_{e} -1\right)\left(2v_{e} -1\right)}
 \end{equation}
 
 # Acknowledgements
