@@ -50,8 +50,8 @@ bibliography: paper.bib
 ---
 
 # Summary
-The pRT codebase has undergone significant updates since its initial publication in `@molliere:2019` 
-A retrieval module combining the pRT spectrum calculations with the {\tt MultiNest} `[@feroz:2008; @feroz:2009; feroz:2013]`and {\tt Ultranest} `[@buchner:2014]` samplers has been included to streamline retrievals of exoplanet atmospheres in emission and transmission.
+The pRT codebase has undergone significant updates since its initial publication in `@molliere2019` 
+A retrieval module combining the pRT spectrum calculations with the {\tt MultiNest} `[@feroz2008; @feroz2009; feroz2013]`and {\tt Ultranest} `[@buchner2014]` samplers has been included to streamline retrievals of exoplanet atmospheres in emission and transmission.
 
 
 
@@ -65,11 +65,10 @@ The resulting spectrum compared to the data with flux $\vec{F}$ and covariance $
     -2\log\mathcal{L} = \left(\vec{S}-\vec{F}\right)^{T}\mathbf{C}^{-1}\left(\vec{S}-\vec{F}\right) + \log\left(2\pi\det\left(\mathbf{C}\right)\right).
 \end{equation}
 The second term is included in the likelihood to allow for uncertainties to vary as a free parameter during the retrieval, and penalizes overly large uncertainties.
-Additional likelihood calculations for high resolution retrievals based on \cite{nixonhires} and \cite{brogi_retrieving_2019} are also available, and will be discussed in more detail in a forthcoming paper from Blain et al. (in prep.).
 
 pRT can compute spectra either using line-by-line calculations, or using correlated-k tables for defining the opacities of molecular species.
-We include up-to-date correlated-k line lists from Exomol \citep{tennyson_exomol_2012,chubb_exomolop_2020} and HITEMP \citep{rothman_hitemp_2010}, with the full set of available opacities listed in the online documentation.
-The \verb|exo-k| package is used to resample the the correlated-k opacity tables to a lower spectral resolution in order to reduce the computation time \citep{leconte_2021_exok}.
+We include up-to-date correlated-k line lists from Exomol `[@tennyson2012; mckemmish2016; polyansky2018; chubb2020]` and HITEMP `[@rothman2010]`, with the full set of available opacities listed in the online documentation.
+The \verb|exo-k| package is used to resample the the correlated-k opacity tables to a lower spectral resolution in order to reduce the computation time `[@leconte2021]`.
 
 Included in pRT is an option to use an adaptive pressure grid with a higher resolution around the location of the cloud base, and a lower resolution elsewhere. 
 The higher resolution grid is 10 times as fine as the remaining grid, and replaces one grid cell above and below the cloud base layer, as well as the cloud base layer cell itself. 
@@ -93,7 +92,7 @@ Once complete, the resulting grid is linearly interpolated back to the 16 $g$ po
 This fully deterministic process stabilized the log-likelihood calculations in the retrievals, and resulted in a 5$\times$ improvement in the speed of the c-k mixing function.
 
 # Using the Hansen distribution with EDDYSED
-The EddySED cloud model from `@ackermann:2019` is ...
+The EddySED cloud model from `@ackermann2001` is ...
 
 Typically, it  a log-normal particle size distribution is assumed where the geometric particle radius will vary throughout the atmosphere as a function of the vertical diffusion coefficient \kzz and the sedimentation fraction \fsed.
 Here, we will substitute the log-normal particle size distribution with the Hansen distribution, and will rederive the calculation for the particle radius as a function of \kzz and \fsed.
@@ -114,7 +113,7 @@ Here $w_{*}$ is the convective velocity scale. Note that $r_{w}\neq r_{g}$. $r_{
     w_{*} = \frac{K_{zz}}{L},
 \end{equation}
 where $L$ is the convective mixing length.
-Since $w_{*}$ is known, and $v_{f}$ can be found analytically as in \citet{ackerman_precipitating_2001,podolak_2003}, and a linear fit can be used to find both $\alpha$ and $r_{w}$.
+Since $w_{*}$ is known, and $v_{f}$ can be found analytically as in `@ackermann2001` and `@podolak2003`, and a linear fit can be used to find both $\alpha$ and $r_{w}$.
 
 With both of these quantities known, we follow AM01 and define \fsed as:
 \begin{equation}\label{eqn:fsed}
@@ -137,7 +136,7 @@ We start by giving the Hansen distribution in full:
 \begin{equation}
     n(r) = \frac{N \left(\bar{r}v_{e}\right)^{\left(2v_{e}-1\right)/v_{e}}}{\Gamma\left(\left(1-2v_{e}\right)/v_{e}\right)} r^{(1-3v_{e})/v_{e}}\exp\left(-\frac{r}{\bar{r}v_{e}}\right)
 \end{equation}
-In \citet{Hansen_1971}, the authors use the parameters $a$ and $b$ to denote the mean effective radius and effective variance, which we write as $\bar{r}$ and $v_{e}$ respectively.
+In `hansen1971` the authors use the parameters $a$ and $b$ to denote the mean effective radius and effective variance, which we write as $\bar{r}$ and $v_{e}$ respectively.
 These differ from the simple mean radius and variance by weighting them by the particle area, as the cloud particle scatters an amount of light proportional to its area. Thus:
 \begin{equation}
     \bar{r} = \frac{\int_{0}^{\infty}r\pi r^{2}n(r)dr}{\int_{0}^{\infty}\pi r^{2}n(r)dr}
