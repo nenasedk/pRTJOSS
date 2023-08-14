@@ -94,17 +94,17 @@ This fully deterministic process stabilized the log-likelihood calculations in t
 # Using the Hansen distribution with EDDYSED
 The EddySED cloud model from `@ackermann2001` is ...
 
-Typically, it  a log-normal particle size distribution is assumed where the geometric particle radius will vary throughout the atmosphere as a function of the vertical diffusion coefficient \kzz and the sedimentation fraction \fsed.
-Here, we will substitute the log-normal particle size distribution with the Hansen distribution, and will rederive the calculation for the particle radius as a function of \kzz and \fsed.
+Typically, it  a log-normal particle size distribution is assumed where the geometric particle radius will vary throughout the atmosphere as a function of the vertical diffusion coefficient $K_{\rm ZZ}$ and the sedimentation fraction $f_{\rm SED}$.
+Here, we will substitute the log-normal particle size distribution with the Hansen distribution, and will rederive the calculation for the particle radius as a function of $K_{\rm ZZ}$ and $f_{\rm SED}$.
 
-We begin with a review of the \ed model: the distribution of the number of particles as a function of particle radius, $n(r)$ is approximated as a log-normal distribution with width $\sigma_{g}$ and characteristic geometric radius $r_{g}$.
+We begin with a review of the EddySED model: the distribution of the number of particles as a function of particle radius, $n(r)$ is approximated as a log-normal distribution with width $\sigma_{g}$ and characteristic geometric radius $r_{g}$.
 \begin{equation}
     n(r) = \frac{N}{r\sqrt{2\pi}\log\sigma_{g}}\exp\left(-\frac{\log^{2}\left(r/r_{g}\right)}{2\log^{2}\sigma_{g}}\right),
 \end{equation}
 $N$ is the total number of cloud particles.
 
-The goal of the \ed model is to calculate $r_{g}$ for each layer in the atmosphere, given \kzz and \fsed. 
-It balances the upwards vertical mixing, parameterised by \kzz and the particle settling velocity, $v_{f}$
+The goal of the EddySED model is to calculate $r_{g}$ for each layer in the atmosphere, given $K_{\rm ZZ}$ and $f_{\rm SED}$. 
+It balances the upwards vertical mixing, parameterised by $K_{\rm ZZ}$ and the particle settling velocity, $v_{f}$
 \begin{equation}\label{eqn:vf}
     v_{f} = w_{*}\left(\frac{r}{r_{w}}\right)^{\alpha}.
 \end{equation}
@@ -115,7 +115,7 @@ Here $w_{*}$ is the convective velocity scale. Note that $r_{w}\neq r_{g}$. $r_{
 where $L$ is the convective mixing length.
 Since $w_{*}$ is known, and $v_{f}$ can be found analytically as in `@ackermann2001` and `@podolak2003`, and a linear fit can be used to find both $\alpha$ and $r_{w}$.
 
-With both of these quantities known, we follow AM01 and define \fsed as:
+With both of these quantities known, we follow AM01 and define $f_{\rm SED}$ as:
 \begin{equation}\label{eqn:fsed}
     f_{sed} = \frac{\int_{0}^{\infty}r^{3+\alpha}n(r)dr}{r_{w}^{\alpha}\int_{0}^{\infty}r^{3}n(r)dr}
 \end{equation}
@@ -128,7 +128,7 @@ Which we can then use to solve for $r_{g}$:
     r_{g} = r_{w}f_{sed}^{1/\alpha}\exp\left(-\frac{\alpha + 6}{2}\log^{2}\sigma_{g}\right)
 \end{equation}
 
-In order to use the Hansen distribution, we must recalculate the total number of particles $N$, and integrate the distribution for \fsed. 
+In order to use the Hansen distribution, we must recalculate the total number of particles $N$, and integrate the distribution for $f_{\rm SED}$. 
 We note here that the Hansen distribution is parameterised by the effective radius, $\bar{r}$, rather than the geometric mean radius. 
 In this derivation we do not correct for this difference in definition, as both act as nuisance parameters in the context of an atmospheric retrieval.
 
@@ -146,7 +146,7 @@ and
     v_{e} = \frac{\int_{0}^{\infty} \left(r-\bar{r}\right)^{2} r^{2}n(r)dr}{\bar{r}^{2}\int_{0}^{\infty}\pi r^{2}n(r)dr}
 \end{equation}
 
-As in \ed, we will fit for the settling velocity, which will provide us with $\alpha$ and $r_{w}$, which we can use to find \fsed, as in \ref{eqn:fsed}.
+As in EddySED, we will fit for the settling velocity, which will provide us with $\alpha$ and $r_{w}$, which we can use to find $f_{\rm SED}$, as in \ref{eqn:fsed}.
 However, we must now integrate the Hansen distribution. We find that:
 \begin{equation}\label{eqn:hansint}
     \int_{0}^{\infty}r^\beta n_{Hans}(r)dr = \frac{v_{e}^{\beta} \left(v_{e}\beta + 2v_{e} + 1\right) \left(\frac{1}{\bar{r}}\right)^{-\beta} \Gamma\left(\beta + 1 + \frac{1}{v_{e}}\right)}{\left(-v_{e} + v_{e}^{\beta + 3} + 1\right) \Gamma\left(1 + \frac{1}{v_{e}}\right)}
@@ -155,7 +155,7 @@ While this is complicated, when we can nevertheless use Eqns. \ref{eqn:fsed} and
 \begin{equation}
     \bar{r} = \left(\frac{ f_{sed}r_{w}^{\alpha}v_{e}^{-\alpha} \left(v_{e}^{3+\alpha} - v_{e} + 1\right) \Gamma\left(1 + \frac{1}{v_{e}}\right)}{\left(v_{e}\alpha + 2v_{e} + 1\right) \Gamma\left(\alpha + 1 + \frac{1}{v_{e}}\right)}\right)^{\frac{1}{\alpha}}.
 \end{equation}
-Thus for a given \kzz, \fsed and $v_{e}$, we can find the effective particle radius for every layer in the atmosphere.
+Thus for a given $K_{\rm ZZ}$, $f_{\rm SED}$ and $v_{e}$, we can find the effective particle radius for every layer in the atmosphere.
 
 However, in order to compute the cloud opacity, we still require the total particle count. 
 For a volume mixing ratio of a given species, $\chi_{i}$, we can integrate $n(r)$ to find $N$:
