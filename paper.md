@@ -1,115 +1,170 @@
 ---
-title: 'Gala: A Python package for galactic dynamics'
+title: 'Atmospheric Retrievals with petitRADTRANS'
 tags:
   - Python
   - astronomy
-  - dynamics
-  - galactic dynamics
-  - milky way
+  - exoplanets
+  - atmospheres
 authors:
-  - name: Adrian M. Price-Whelan
+  - name: Evert Nasedkin
     orcid: 0000-0000-0000-0000
     equal-contrib: true
-    affiliation: "1, 2" # (Multiple affiliations must be quoted)
-  - name: Author Without ORCID
+    corresponding: true
+    affiliation: 1 # (Multiple affiliations must be quoted)
+  - name: Paul Mollière
     equal-contrib: true # (This is how you can denote equal contributions between multiple authors)
+    affiliation: 1
+  - name: Doriann Blain
+    equal-contrib: true 
+    affiliation: 1
+  - name: Eleonara Alei
+    equal-contrib: false 
     affiliation: 2
-  - name: Author with no affiliation
-    corresponding: true # (This is how to denote the corresponding author)
+  - name: Tomas Stolker
+    equal-contrib: false
     affiliation: 3
+  - name: Nick Wogan
+    equal-contrib: false 
+    affiliation: 4
+  - name: Karan Molaverdikhani
+    equal-contrib: false
+    affiliation: 5
+  - name: Mantas Zilinskas
+    equal-contrib: false 
+    affiliation: 6
+  - name: Francois Rozet
+    equal-contrib: false
+    affiliation: 7
+
 affiliations:
- - name: Lyman Spitzer, Jr. Fellow, Princeton University, USA
+ - name: Max Planck Institut für Astronomie, Germany
    index: 1
- - name: Institution Name, Country
-   index: 2
- - name: Independent Researcher, Country
-   index: 3
-date: 13 August 2017
+date: 14 August 2023
 bibliography: paper.bib
 
 # Optional fields if submitting to a AAS journal too, see this blog post:
 # https://blog.joss.theoj.org/2018/12/a-new-collaboration-with-aas-publishing
-aas-doi: 10.3847/xxxxx <- update this with the DOI from AAS once you know it.
-aas-journal: Astrophysical Journal <- The name of the AAS journal.
+# aas-doi: 10.3847/xxxxx <- update this with the DOI from AAS once you know it.
+# aas-journal: Astrophysical Journal <- The name of the AAS journal.
+#\footnote{\url{https://petitradtrans.readthedocs.io/en/latest/content/notebooks/pRT_Retrieval_Example.html}}. 
 ---
 
 # Summary
+The pRT codebase has undergone significant updates since its initial publication in `@Mollière:2019` 
+A retrieval module combining the pRT spectrum calculations with the {\tt MultiNest} `[@Feroz:2008; @Feroz:2014]`and {\tt Ultranest} `[@Buchner:20XX]` samplers has been included to streamline retrievals of exoplanet atmospheres in emission and transmission.
 
-The forces on stars, galaxies, and dark matter under external gravitational
-fields lead to the dynamical evolution of structures in the universe. The orbits
-of these bodies are therefore key to understanding the formation, history, and
-future state of galaxies. The field of "galactic dynamics," which aims to model
-the gravitating components of galaxies to study their structure and evolution,
-is now well-established, commonly taught, and frequently used in astronomy.
-Aside from toy problems and demonstrations, the majority of problems require
-efficient numerical tools, many of which require the same base code (e.g., for
-performing numerical orbit integration).
+
 
 # Statement of need
-
-`Gala` is an Astropy-affiliated Python package for galactic dynamics. Python
-enables wrapping low-level languages (e.g., C) for speed without losing
-flexibility or ease-of-use in the user-interface. The API for `Gala` was
-designed to provide a class-based and user-friendly interface to fast (C or
-Cython-optimized) implementations of common operations such as gravitational
-potential and force evaluation, orbit integration, dynamical transformations,
-and chaos indicators for nonlinear dynamics. `Gala` also relies heavily on and
-interfaces well with the implementations of physical units and astronomical
-coordinate systems in the `Astropy` package [@astropy] (`astropy.units` and
-`astropy.coordinates`).
-
-`Gala` was designed to be used by both astronomical researchers and by
-students in courses on gravitational dynamics or astronomy. It has already been
-used in a number of scientific publications [@Pearson:2017] and has also been
-used in graduate courses on Galactic dynamics to, e.g., provide interactive
-visualizations of textbook material [@Binney:2008]. The combination of speed,
-design, and support for Astropy functionality in `Gala` will enable exciting
-scientific explorations of forthcoming data releases from the *Gaia* mission
-[@gaia] by students and experts alike.
-
-# Mathematics
-
-Single dollars ($) are required for inline mathematics e.g. $f(x) = e^{\pi/x}$
-
-Double dollars make self-standing equations:
-
-$$\Theta(x) = \left\{\begin{array}{l}
-0\textrm{ if } x < 0\cr
-1\textrm{ else}
-\end{array}\right.$$
-
-You can also use plain \LaTeX for equations
-\begin{equation}\label{eq:fourier}
-\hat f(\omega) = \int_{-\infty}^{\infty} f(x) e^{i\omega x} dx
+Multiple datasets can be included into a single retrieval, with each dataset receiving its own {\tt RadTrans} object used for the radiative transfer calculation, allowing for highly flexible retrievals where multiple spectral resolutions, wavelength ranges and even atmospheric models can be combined in a single retrieval.
+Each dataset can also receive scaling factors (for the flux, uncertainties or both), error inflation factors and offsets.
+Several atmospheric models are built into the {\tt models} module, allowing for a wide range of P-T, cloud and chemistry parameterizations.
+These models are used to compute a spectrum $\vec{S}$, which is convolved to the instrumental resolution and binned to the wavelength bins of the data using a custom binning function to account for non-uniform bin sizes.
+The resulting spectrum compared to the data with flux $\vec{F}$ and covariance $\mathbf{C}$ in the likelihood function:
+\begin{equation}\label{eqn:loglike}
+    -2\log\mathcal{L} = \left(\vec{S}-\vec{F}\right)^{T}\mathbf{C}^{-1}\left(\vec{S}-\vec{F}\right) + \log\left(2\pi\det\left(\mathbf{C}\right)\right).
 \end{equation}
-and refer to \autoref{eq:fourier} from text.
+The second term is included in the likelihood to allow for uncertainties to vary as a free parameter during the retrieval, and penalizes overly large uncertainties.
+Additional likelihood calculations for high resolution retrievals based on \cite{nixonhires} and \cite{brogi_retrieving_2019} are also available, and will be discussed in more detail in a forthcoming paper from Blain et al. (in prep.).
 
-# Citations
+pRT can compute spectra either using line-by-line calculations, or using correlated-k tables for defining the opacities of molecular species.
+We include up-to-date correlated-k line lists from Exomol \citep{tennyson_exomol_2012,chubb_exomolop_2020} and HITEMP \citep{rothman_hitemp_2010}, with the full set of available opacities listed in the online documentation.
+The \verb|exo-k| package is used to resample the the correlated-k opacity tables to a lower spectral resolution in order to reduce the computation time \citep{leconte_2021_exok}.
 
-Citations to entries in paper.bib should be in
-[rMarkdown](http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html)
-format.
+Included in pRT is an option to use an adaptive pressure grid with a higher resolution around the location of the cloud base, and a lower resolution elsewhere. 
+The higher resolution grid is 10 times as fine as the remaining grid, and replaces one grid cell above and below the cloud base layer, as well as the cloud base layer cell itself. 
+This allows for more precise positioning of the cloud layers within the atmosphere. 
+Including this adaptive mesh, our pressure grid contains a total of 154 layers when two cloud species are used, which is the standard grid used in this work. 
 
-If you want to cite a software repository URL (e.g. something on GitHub without a preferred
-citation) then you can do it with the example BibTeX entry below for @fidgit.
+Finally, photometric data are fully incorporated into the retrieval process.
+As with spectroscopic data, a model is computed using a user-defined function.
+This model spectrum is then multiplied by a filter transmission profile from the SVO database using the {\tt species} package.
+This results in accurate synthetic photometry, which can be compared to the values specied by the user with the {\tt add_photometry} function.
 
-For a quick reference, the following citation commands can be used:
-- `@author:2001`  ->  "Author et al. (2001)"
-- `[@author:2001]` -> "(Author et al., 2001)"
-- `[@author1:2001; @author2:2001]` -> "(Author1 et al., 2001; Author2 et al., 2002)"
+## Correlated-k Implementation
+The correlated-k implementation was significantly improved in both accuracy and speed.
+Combining the c-k opacities of multiple species requires mixing the distributions in $g$ space. 
+{\color{red}Previously, this was accomplished by taking 1000 samples of each distribution.}
+This sampling process resulted in non-deterministic spectral calculations, resulting in unexpected behaviour from the nested sampling process, as the same set of parameters could result in varying log-likelihood.
+This has been updated to fully mix the c-k distributions.
+Considering the first species, the second species is added in, and the resulting grid is sorted. 
+The cumulative opacity grid is then mixed with the next species, a process which iterates until every species with significant opacity contributions (>0.1$\%$ of the current opacity in any bin) is mixed in to the opacity grid. 
+Once complete, the resulting grid is linearly interpolated back to the 16 $g$ points at each pressure and frequency bin as required by pRT.
+This fully deterministic process stabilized the log-likelihood calculations in the retrievals, and resulted in a 5$\times$ improvement in the speed of the c-k mixing function.
 
-# Figures
+# Using the Hansen distribution with EDDYSED
+The \ed cloud model from \citet{ackerman_precipitating_2001} is ...
+Trypically, it assumes a log-normal particle size distribution, where the geometric particle radius will vary throughout the atmosphere as a function of the vertical diffusion coefficient \kzz and the sedimentation fraction \fsed.
+Here, we will substitute the log-normal particle size distribution with the Hansen distribution, and will rederive the calculation for the particle radius as a function of \kzz and \fsed.
 
-Figures can be included like this:
-![Caption for example figure.\label{fig:example}](figure.png)
-and referenced from text using \autoref{fig:example}.
+We begin with a review of the \ed model: the distribution of the number of particles as a function of particle radius, $n(r)$ is approximated as a log-normal distribution with width $\sigma_{g}$ and characteristic geometric radius $r_{g}$.
+\begin{equation}
+    n(r) = \frac{N}{r\sqrt{2\pi}\log\sigma_{g}}\exp\left(-\frac{\log^{2}\left(r/r_{g}\right)}{2\log^{2}\sigma_{g}}\right),
+\end{equation}
+$N$ is the total number of cloud particles.
 
-Figure sizes can be customized by adding an optional second parameter:
-![Caption for example figure.](figure.png){ width=20% }
+The goal of the \ed model is to calculate $r_{g}$ for each layer in the atmosphere, given \kzz and \fsed. 
+It balances the upwards vertical mixing, parameterised by \kzz and the particle settling velocity, $v_{f}$
+\begin{equation}\label{eqn:vf}
+    v_{f} = w_{*}\left(\frac{r}{r_{w}}\right)^{\alpha}.
+\end{equation}
+Here $w_{*}$ is the convective velocity scale. Note that $r_{w}\neq r_{g}$. $r_{w}$ is the radius at which the  particle settling velocity equals the convective velocity scale:
+\begin{equation}
+    w_{*} = \frac{K_{zz}}{L},
+\end{equation}
+where $L$ is the convective mixing length.
+Since $w_{*}$ is known, and $v_{f}$ can be found analytically as in \citet{ackerman_precipitating_2001,podolak_2003}, and a linear fit can be used to find both $\alpha$ and $r_{w}$.
+
+With both of these quantities known, we follow AM01 and define \fsed as:
+\begin{equation}\label{eqn:fsed}
+    f_{sed} = \frac{\int_{0}^{\infty}r^{3+\alpha}n(r)dr}{r_{w}^{\alpha}\int_{0}^{\infty}r^{3}n(r)dr}
+\end{equation}
+For the log-normal distribution, one finds:
+\begin{equation}
+    \int_{0}^{\infty}r^{\beta}n(r)dr = Nr_{g}^{\beta}\exp\left(\frac{1}{2}\beta^{2}\log^{2}\sigma_{g}\right)
+\end{equation}
+Which we can then use to solve for $r_{g}$:
+\begin{equation}
+    r_{g} = r_{w}f_{sed}^{1/\alpha}\exp\left(-\frac{\alpha + 6}{2}\log^{2}\sigma_{g}\right)
+\end{equation}
+
+In order to use the Hansen distribution, we must recalculate the total number of particles $N$, and integrate the distribution for \fsed. 
+We note here that the Hansen distribution is parameterised by the effective radius, $\bar{r}$, rather than the geometric mean radius. 
+In this derivation we do not correct for this difference in definition, as both act as nuisance parameters in the context of an atmospheric retrieval.
+
+We start by giving the Hansen distribution in full:
+\begin{equation}
+    n(r) = \frac{N \left(\bar{r}v_{e}\right)^{\left(2v_{e}-1\right)/v_{e}}}{\Gamma\left(\left(1-2v_{e}\right)/v_{e}\right)} r^{(1-3v_{e})/v_{e}}\exp\left(-\frac{r}{\bar{r}v_{e}}\right)
+\end{equation}
+In \citet{Hansen_1971}, the authors use the parameters $a$ and $b$ to denote the mean effective radius and effective variance, which we write as $\bar{r}$ and $v_{e}$ respectively.
+These differ from the simple mean radius and variance by weighting them by the particle area, as the cloud particle scatters an amount of light proportional to its area. Thus:
+\begin{equation}
+    \bar{r} = \frac{\int_{0}^{\infty}r\pi r^{2}n(r)dr}{\int_{0}^{\infty}\pi r^{2}n(r)dr}
+\end{equation}
+and 
+\begin{equation}
+    v_{e} = \frac{\int_{0}^{\infty} \left(r-\bar{r}\right)^{2} r^{2}n(r)dr}{\bar{r}^{2}\int_{0}^{\infty}\pi r^{2}n(r)dr}
+\end{equation}
+
+As in \ed, we will fit for the settling velocity, which will provide us with $\alpha$ and $r_{w}$, which we can use to find \fsed, as in \ref{eqn:fsed}.
+However, we must now integrate the Hansen distribution. We find that:
+\begin{equation}\label{eqn:hansint}
+    \int_{0}^{\infty}r^\beta n_{Hans}(r)dr = \frac{v_{e}^{\beta} \left(v_{e}\beta + 2v_{e} + 1\right) \left(\frac{1}{\bar{r}}\right)^{-\beta} \Gamma\left(\beta + 1 + \frac{1}{v_{e}}\right)}{\left(-v_{e} + v_{e}^{\beta + 3} + 1\right) \Gamma\left(1 + \frac{1}{v_{e}}\right)}
+\end{equation}
+While this is complicated, when we can nevertheless use Eqns. \ref{eqn:fsed} and \ref{eqn:hansint} to solve for $\bar{r}$:
+\begin{equation}
+    \bar{r} = \left(\frac{ f_{sed}r_{w}^{\alpha}v_{e}^{-\alpha} \left(v_{e}^{3+\alpha} - v_{e} + 1\right) \Gamma\left(1 + \frac{1}{v_{e}}\right)}{\left(v_{e}\alpha + 2v_{e} + 1\right) \Gamma\left(\alpha + 1 + \frac{1}{v_{e}}\right)}\right)^{\frac{1}{\alpha}}.
+\end{equation}
+Thus for a given \kzz, \fsed and $v_{e}$, we can find the effective particle radius for every layer in the atmosphere.
+
+However, in order to compute the cloud opacity, we still require the total particle count. 
+For a volume mixing ratio of a given species, $\chi_{i}$, we can integrate $n(r)$ to find $N$:
+\begin{equation}
+ N = \frac{\chi_{i}}{\left(\bar{r}^{3}v_{e} -1\right)\left((2v_{e} -1\right)}
+\end{equation}
 
 # Acknowledgements
 
-We acknowledge contributions from Brigitta Sipocz, Syrtis Major, and Semyeong
-Oh, and support from Kathryn Johnston during the genesis of this project.
+We acknowledge contributions 
 
 # References
