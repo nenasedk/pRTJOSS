@@ -55,12 +55,14 @@ The `petitRADTRANS` (pRT) codebase has undergone significant updates since its i
 A retrieval module combining the pRT spectrum calculations with the `MultiNest` `[@feroz2008; @feroz2009; @feroz2013]`and `Ultranest` `[@buchner2014]` samplers has been included to streamline retrievals of exoplanet atmospheres in emission and transmission.
 
 SUMMARY HERE
+
 # Statement of need
 
 Retrievals are important.
 Faster sampling using nested sampling.
 Unique in ability to do c-k, line by line, transmission and emission, or any combination thereof.
 Widely used in the community (e.g. ...)
+
 # petitRADTANS Retrieval Module
 
 Brief Intro
