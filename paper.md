@@ -51,7 +51,7 @@ bibliography: paper.bib
 
 # Summary
 The pRT codebase has undergone significant updates since its initial publication in `@molliere2019` 
-A retrieval module combining the pRT spectrum calculations with the ``MultiNest` `[@feroz2008; @feroz2009; feroz2013]`and `Ultranest` `[@buchner2014]` samplers has been included to streamline retrievals of exoplanet atmospheres in emission and transmission.
+A retrieval module combining the pRT spectrum calculations with the `MultiNest` `[@feroz2008; @feroz2009; @feroz2013]`and `Ultranest` `[@buchner2014]` samplers has been included to streamline retrievals of exoplanet atmospheres in emission and transmission.
 
 
 
@@ -83,7 +83,7 @@ This results in accurate synthetic photometry, which can be compared to the valu
 ## Correlated-k Implementation
 The correlated-k implementation was significantly improved in both accuracy and speed.
 Combining the c-k opacities of multiple species requires mixing the distributions in $g$ space. 
-{\color{red}Previously, this was accomplished by taking 1000 samples of each distribution.}
+Previously, this was accomplished by taking 1000 samples of each distribution.
 This sampling process resulted in non-deterministic spectral calculations, resulting in unexpected behaviour from the nested sampling process, as the same set of parameters could result in varying log-likelihood.
 This has been updated to fully mix the c-k distributions.
 Considering the first species, the second species is added in, and the resulting grid is sorted. 
@@ -91,7 +91,7 @@ The cumulative opacity grid is then mixed with the next species, a process which
 Once complete, the resulting grid is linearly interpolated back to the 16 $g$ points at each pressure and frequency bin as required by pRT.
 This fully deterministic process stabilized the log-likelihood calculations in the retrievals, and resulted in a 5$\times$ improvement in the speed of the c-k mixing function.
 
-# Using the Hansen distribution with EDDYSED
+## Using the Hansen distribution with EDDYSED
 The EddySED cloud model from `@ackermann2001` is ...
 
 Typically, it  a log-normal particle size distribution is assumed where the geometric particle radius will vary throughout the atmosphere as a function of the vertical diffusion coefficient $K_{\rm ZZ}$ and the sedimentation fraction $f_{\rm SED}$.
