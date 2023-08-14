@@ -78,7 +78,7 @@ The resulting spectrum compared to the data with flux $\vec{F}$ and covariance $
 The second term is included in the likelihood to allow for uncertainties to vary as a free parameter during the retrieval, and penalizes overly large uncertainties.
 
 pRT can compute spectra either using line-by-line calculations, or using correlated-k tables for defining the opacities of molecular species.
-We include up-to-date correlated-k line lists from Exomol [@tennyson2012; mckemmish2016; polyansky2018; chubb2020] and HITEMP [@rothman2010], with the full set of available opacities listed in the online documentation.
+We include up-to-date correlated-k line lists from Exomol [@tennyson2012; @mckemmish2016; @polyansky2018; @chubb2020] and HITEMP [@rothman2010], with the full set of available opacities listed in the online documentation.
 The \verb|exo-k| package is used to resample the the correlated-k opacity tables to a lower spectral resolution in order to reduce the computation time [@leconte2021].
 
 Included in pRT is an option to use an adaptive pressure grid with a higher resolution around the location of the cloud base, and a lower resolution elsewhere. 
