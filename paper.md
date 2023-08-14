@@ -51,8 +51,8 @@ bibliography: paper.bib
 
 # Summary
 
-The `petitRADTRANS` (pRT) codebase has undergone significant updates since its initial publication in `@molliere2019` 
-A retrieval module combining the pRT spectrum calculations with the `MultiNest` `[@feroz2008; @feroz2009; @feroz2013]`and `Ultranest` `[@buchner2014]` samplers has been included to streamline retrievals of exoplanet atmospheres in emission and transmission.
+The `petitRADTRANS` (pRT) codebase has undergone significant updates since its initial publication in @molliere2019.
+A retrieval module combining the pRT spectrum calculations with the `MultiNest` [@feroz2008; @feroz2009; @feroz2013] and `Ultranest` [@buchner2014] samplers has been included to streamline retrievals of exoplanet atmospheres in emission and transmission.
 
 SUMMARY HERE
 
@@ -78,8 +78,8 @@ The resulting spectrum compared to the data with flux $\vec{F}$ and covariance $
 The second term is included in the likelihood to allow for uncertainties to vary as a free parameter during the retrieval, and penalizes overly large uncertainties.
 
 pRT can compute spectra either using line-by-line calculations, or using correlated-k tables for defining the opacities of molecular species.
-We include up-to-date correlated-k line lists from Exomol `[@tennyson2012; mckemmish2016; polyansky2018; chubb2020]` and HITEMP `[@rothman2010]`, with the full set of available opacities listed in the online documentation.
-The \verb|exo-k| package is used to resample the the correlated-k opacity tables to a lower spectral resolution in order to reduce the computation time `[@leconte2021]`.
+We include up-to-date correlated-k line lists from Exomol [@tennyson2012; mckemmish2016; polyansky2018; chubb2020] and HITEMP [@rothman2010], with the full set of available opacities listed in the online documentation.
+The \verb|exo-k| package is used to resample the the correlated-k opacity tables to a lower spectral resolution in order to reduce the computation time [@leconte2021].
 
 Included in pRT is an option to use an adaptive pressure grid with a higher resolution around the location of the cloud base, and a lower resolution elsewhere. 
 The higher resolution grid is 10 times as fine as the remaining grid, and replaces one grid cell above and below the cloud base layer, as well as the cloud base layer cell itself. 
@@ -88,7 +88,7 @@ Including this adaptive mesh, our pressure grid contains a total of 154 layers w
 
 Finally, photometric data are fully incorporated into the retrieval process.
 As with spectroscopic data, a model is computed using a user-defined function.
-This model spectrum is then multiplied by a filter transmission profile from the SVO database using the `species` package `[@stolker2020]`.
+This model spectrum is then multiplied by a filter transmission profile from the SVO database using the `species` package [@stolker2020].
 This results in accurate synthetic photometry, which can be compared to the values specied by the user with the `add_photometry` function.
 
 Combining the c-k opacities of multiple species requires mixing the distributions in $g$ space. 
