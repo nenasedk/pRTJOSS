@@ -50,12 +50,18 @@ bibliography: paper.bib
 ---
 
 # Summary
-The pRT codebase has undergone significant updates since its initial publication in `@molliere2019` 
+The `petitRADTRANS` (pRT) codebase has undergone significant updates since its initial publication in `@molliere2019` 
 A retrieval module combining the pRT spectrum calculations with the `MultiNest` `[@feroz2008; @feroz2009; @feroz2013]`and `Ultranest` `[@buchner2014]` samplers has been included to streamline retrievals of exoplanet atmospheres in emission and transmission.
 
-
-
+SUMMARY HERE
 # Statement of need
+Retrievals are important.
+Faster sampling using nested sampling.
+Unique in ability to do c-k, line by line, transmission and emission, or any combination thereof.
+Widely used in the community (e.g. ...)
+# petitRADTANS Retrieval Module
+Brief Intro
+
 Multiple datasets can be included into a single retrieval, with each dataset receiving its own `RadTrans` object used for the radiative transfer calculation, allowing for highly flexible retrievals where multiple spectral resolutions, wavelength ranges and even atmospheric models can be combined in a single retrieval.
 Each dataset can also receive scaling factors (for the flux, uncertainties or both), error inflation factors and offsets.
 Several atmospheric models are built into the `models` module, allowing for a wide range of P-T, cloud and chemistry parameterizations.
@@ -80,8 +86,6 @@ As with spectroscopic data, a model is computed using a user-defined function.
 This model spectrum is then multiplied by a filter transmission profile from the SVO database using the `species` package `[@stolker2020]`.
 This results in accurate synthetic photometry, which can be compared to the values specied by the user with the `add_photometry` function.
 
-## Correlated-k Implementation
-The correlated-k implementation was significantly improved in both accuracy and speed.
 Combining the c-k opacities of multiple species requires mixing the distributions in $g$ space. 
 Previously, this was accomplished by taking 1000 samples of each distribution.
 This sampling process resulted in non-deterministic spectral calculations, resulting in unexpected behaviour from the nested sampling process, as the same set of parameters could result in varying log-likelihood.
@@ -91,77 +95,6 @@ The cumulative opacity grid is then mixed with the next species, a process which
 Once complete, the resulting grid is linearly interpolated back to the 16 $g$ points at each pressure and frequency bin as required by pRT.
 This fully deterministic process stabilized the log-likelihood calculations in the retrievals, and resulted in a 5$\times$ improvement in the speed of the c-k mixing function.
 
-## Using the Hansen distribution with EDDYSED
-The EddySED cloud model from `@ackermann2001` is ...
-
-Typically, it  a log-normal particle size distribution is assumed where the geometric particle radius will vary throughout the atmosphere as a function of the vertical diffusion coefficient $K_{\rm ZZ}$ and the sedimentation fraction $f_{\rm SED}$.
-Here, we will substitute the log-normal particle size distribution with the Hansen distribution, and will rederive the calculation for the particle radius as a function of $K_{\rm ZZ}$ and $f_{\rm SED}$.
-
-We begin with a review of the EddySED model: the distribution of the number of particles as a function of particle radius, $n(r)$ is approximated as a log-normal distribution with width $\sigma_{g}$ and characteristic geometric radius $r_{g}$.
-\begin{equation}
-    n(r) = \frac{N}{r\sqrt{2\pi}\log\sigma_{g}}\exp\left(-\frac{\log^{2}\left(r/r_{g}\right)}{2\log^{2}\sigma_{g}}\right),
-\end{equation}
-$N$ is the total number of cloud particles.
-
-The goal of the EddySED model is to calculate $r_{g}$ for each layer in the atmosphere, given $K_{\rm ZZ}$ and $f_{\rm SED}$. 
-It balances the upwards vertical mixing, parameterised by $K_{\rm ZZ}$ and the particle settling velocity, $v_{f}$
-\begin{equation}\label{eqn:vf}
-    v_{f} = w_{*}\left(\frac{r}{r_{w}}\right)^{\alpha}.
-\end{equation}
-Here $w_{*}$ is the convective velocity scale. Note that $r_{w}\neq r_{g}$. $r_{w}$ is the radius at which the  particle settling velocity equals the convective velocity scale:
-\begin{equation}
-    w_{*} = \frac{K_{zz}}{L},
-\end{equation}
-where $L$ is the convective mixing length.
-Since $w_{*}$ is known, and $v_{f}$ can be found analytically as in `@ackermann2001` and `@podolak2003`, and a linear fit can be used to find both $\alpha$ and $r_{w}$.
-
-With both of these quantities known, we follow AM01 and define $f_{\rm SED}$ as:
-\begin{equation}\label{eqn:fsed}
-    f_{sed} = \frac{\int_{0}^{\infty}r^{3+\alpha}n(r)dr}{r_{w}^{\alpha}\int_{0}^{\infty}r^{3}n(r)dr}
-\end{equation}
-For the log-normal distribution, one finds:
-\begin{equation}
-    \int_{0}^{\infty}r^{\beta}n(r)dr = Nr_{g}^{\beta}\exp\left(\frac{1}{2}\beta^{2}\log^{2}\sigma_{g}\right)
-\end{equation}
-Which we can then use to solve for $r_{g}$:
-\begin{equation}
-    r_{g} = r_{w}f_{sed}^{1/\alpha}\exp\left(-\frac{\alpha + 6}{2}\log^{2}\sigma_{g}\right)
-\end{equation}
-
-In order to use the Hansen distribution, we must recalculate the total number of particles $N$, and integrate the distribution for $f_{\rm SED}$. 
-We note here that the Hansen distribution is parameterised by the effective radius, $\bar{r}$, rather than the geometric mean radius. 
-In this derivation we do not correct for this difference in definition, as both act as nuisance parameters in the context of an atmospheric retrieval.
-
-We start by giving the Hansen distribution in full:
-\begin{equation}
-    n(r) = \frac{N \left(\bar{r}v_{e}\right)^{\left(2v_{e}-1\right)/v_{e}}}{\Gamma\left(\left(1-2v_{e}\right)/v_{e}\right)} r^{(1-3v_{e})/v_{e}}\exp\left(-\frac{r}{\bar{r}v_{e}}\right)
-\end{equation}
-In `hansen1971` the authors use the parameters $a$ and $b$ to denote the mean effective radius and effective variance, which we write as $\bar{r}$ and $v_{e}$ respectively.
-These differ from the simple mean radius and variance by weighting them by the particle area, as the cloud particle scatters an amount of light proportional to its area. Thus:
-\begin{equation}
-    \bar{r} = \frac{\int_{0}^{\infty}r\pi r^{2}n(r)dr}{\int_{0}^{\infty}\pi r^{2}n(r)dr}
-\end{equation}
-and 
-\begin{equation}
-    v_{e} = \frac{\int_{0}^{\infty} \left(r-\bar{r}\right)^{2} r^{2}n(r)dr}{\bar{r}^{2}\int_{0}^{\infty}\pi r^{2}n(r)dr}
-\end{equation}
-
-As in EddySED, we will fit for the settling velocity, which will provide us with $\alpha$ and $r_{w}$, which we can use to find $f_{\rm SED}$, as in \ref{eqn:fsed}.
-However, we must now integrate the Hansen distribution. We find that:
-\begin{equation}\label{eqn:hansint}
-    \int_{0}^{\infty}r^\beta n_{Hans}(r)dr = \frac{v_{e}^{\beta} \left(v_{e}\beta + 2v_{e} + 1\right) \left(\frac{1}{\bar{r}}\right)^{-\beta} \Gamma\left(\beta + 1 + \frac{1}{v_{e}}\right)}{\left(-v_{e} + v_{e}^{\beta + 3} + 1\right) \Gamma\left(1 + \frac{1}{v_{e}}\right)}
-\end{equation}
-While this is complicated, when we can nevertheless use Eqns. \ref{eqn:fsed} and \ref{eqn:hansint} to solve for $\bar{r}$:
-\begin{equation}
-    \bar{r} = \left(\frac{ f_{sed}r_{w}^{\alpha}v_{e}^{-\alpha} \left(v_{e}^{3+\alpha} - v_{e} + 1\right) \Gamma\left(1 + \frac{1}{v_{e}}\right)}{\left(v_{e}\alpha + 2v_{e} + 1\right) \Gamma\left(\alpha + 1 + \frac{1}{v_{e}}\right)}\right)^{\frac{1}{\alpha}}.
-\end{equation}
-Thus for a given $K_{\rm ZZ}$, $f_{\rm SED}$ and $v_{e}$, we can find the effective particle radius for every layer in the atmosphere.
-
-However, in order to compute the cloud opacity, we still require the total particle count. 
-For a volume mixing ratio of a given species, $\chi_{i}$, we can integrate $n(r)$ to find $N$:
-\begin{equation}
- N = \frac{\chi_{i}}{\left(\bar{r}^{3}v_{e} -1\right)\left(2v_{e} -1\right)}
-\end{equation}
 
 # Acknowledgements
 
