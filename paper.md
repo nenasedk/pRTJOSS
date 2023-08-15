@@ -51,26 +51,25 @@ bibliography: paper.bib
 
 # Summary
 
-The `petitRADTRANS` (pRT) codebase has undergone significant updates since its initial publication in @molliere2019.
-A retrieval module combining the pRT spectrum calculations with the `MultiNest` [@feroz2008; @feroz2009; @feroz2013] and `Ultranest` [@buchner2014] samplers has been included to streamline retrievals of exoplanet atmospheres in emission and transmission.
-
-SUMMARY HERE
+`petitRADTRANS` (pRT) is a fast radiative transfer code used for computing emission and transmission spectra of exoplanet atmospheres.
+These spectra can be used as a forward model for fitting data using monte carlo techniques, commonly referred to as an atmospheric retrieval.
+The retrieval module of pRT combines fast pRT with the `MultiNest` [@feroz2008; @feroz2009; @feroz2013] and `Ultranest` [@buchner2014] nested sampling codes, allowing for fast atmospheric retrievals on a large range of different types of exoplanet data.
 
 # Statement of need
 
-Retrievals are important.
-Faster sampling using nested sampling.
-Unique in ability to do c-k, line by line, transmission and emission, or any combination thereof.
-Widely used in the community (e.g. ...)
+Atmospheric retrievals are a cornerstone of exoplanet atmospheric characterisation.
+pRT is a powerful and user-friendly tool, and is unique in its abilities to characterise exoplanets in both emission and transmission.
+Various thermal structures, chemistry and cloud parameterisations and opacity calculation methods (correlated-k and line-by-line) can be combined and used to statistically identify the most favoured model for a given atmosphere.
+With increasing volumes of both ground- and space-based spectra available, it is necessary for exoplanet researchers to have access to a range of characterisation tools.
 
 # petitRADTANS Retrieval Module
-
-Brief Intro
+The `Retrieval` module combines the `RadTrans` forward modelling class with a nested sampler via a likelihood function to perform an atmospheric retrieval.
+Datasets, priors and other retrieval hyper parameters are set through the `RetrievalConfig` class, while the `models` module includes a range of complete atmospheric models that can be fit to the data.
+Users can also define their own model function, making use of temperature profiles from the `physics` module and chemistry parameterisations from the `chemistry` module. 
 
 Multiple datasets can be included into a single retrieval, with each dataset receiving its own `RadTrans` object used for the radiative transfer calculation, allowing for highly flexible retrievals where multiple spectral resolutions, wavelength ranges and even atmospheric models can be combined in a single retrieval.
 Each dataset can also receive scaling factors (for the flux, uncertainties or both), error inflation factors and offsets.
-Several atmospheric models are built into the `models` module, allowing for a wide range of P-T, cloud and chemistry parameterizations.
-These models are used to compute a spectrum $\vec{S}$, which is convolved to the instrumental resolution and binned to the wavelength bins of the data using a custom binning function to account for non-uniform bin sizes.
+The model functions are used to compute a spectrum $\vec{S}$, which is convolved to the instrumental resolution and binned to the wavelength bins of the data using a custom binning function to account for non-uniform bin sizes.
 The resulting spectrum compared to the data with flux $\vec{F}$ and covariance $\mathbf{C}$ in the likelihood function:
 \begin{equation}\label{eqn:loglike}
     -2\log\mathcal{L} = \left(\vec{S}-\vec{F}\right)^{T}\mathbf{C}^{-1}\left(\vec{S}-\vec{F}\right) + \log\left(2\pi\det\left(\mathbf{C}\right)\right).
@@ -80,17 +79,6 @@ The second term is included in the likelihood to allow for uncertainties to vary
 pRT can compute spectra either using line-by-line calculations, or using correlated-k tables for defining the opacities of molecular species.
 We include up-to-date correlated-k line lists from Exomol [@tennyson2012; @mckemmish2016; @polyansky2018; @chubb2020] and HITEMP [@rothman2010], with the full set of available opacities listed in the online documentation.
 The \verb|exo-k| package is used to resample the the correlated-k opacity tables to a lower spectral resolution in order to reduce the computation time [@leconte2021].
-
-Included in pRT is an option to use an adaptive pressure grid with a higher resolution around the location of the cloud base, and a lower resolution elsewhere. 
-The higher resolution grid is 10 times as fine as the remaining grid, and replaces one grid cell above and below the cloud base layer, as well as the cloud base layer cell itself. 
-This allows for more precise positioning of the cloud layers within the atmosphere. 
-Including this adaptive mesh, our pressure grid contains a total of 154 layers when two cloud species are used, which is the standard grid used in this work. 
-
-Finally, photometric data are fully incorporated into the retrieval process.
-As with spectroscopic data, a model is computed using a user-defined function.
-This model spectrum is then multiplied by a filter transmission profile from the SVO database using the `species` package [@stolker2020].
-This results in accurate synthetic photometry, which can be compared to the values specied by the user with the `add_photometry` function.
-
 Combining the c-k opacities of multiple species requires mixing the distributions in $g$ space. 
 Previously, this was accomplished by taking 1000 samples of each distribution.
 This sampling process resulted in non-deterministic spectral calculations, resulting in unexpected behaviour from the nested sampling process, as the same set of parameters could result in varying log-likelihood.
@@ -100,6 +88,14 @@ The cumulative opacity grid is then mixed with the next species, a process which
 Once complete, the resulting grid is linearly interpolated back to the 16 $g$ points at each pressure and frequency bin as required by pRT.
 This fully deterministic process stabilized the log-likelihood calculations in the retrievals, and resulted in a 5$\times$ improvement in the speed of the c-k mixing function.
 
+Included in pRT is an option to use an adaptive pressure grid with a higher resolution around the location of the cloud base, and a lower resolution elsewhere. 
+The higher resolution grid is 10 times as fine as the remaining grid, and replaces one grid cell above and below the cloud base layer, as well as the cloud base layer cell itself. 
+This allows for more precise positioning of the cloud layers within the atmosphere. 
+
+Finally, photometric data are fully incorporated into the retrieval process.
+As with spectroscopic data, a model is computed using a user-defined function.
+This model spectrum is then multiplied by a filter transmission profile from the SVO database using the `species` package [@stolker2020].
+This results in accurate synthetic photometry, which can be compared to the values specied by the user with the `add_photometry` function.
 
 # Acknowledgements
 
