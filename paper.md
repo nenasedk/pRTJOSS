@@ -83,7 +83,7 @@ We include up-to-date correlated-k line lists from Exomol [@tennyson2012; @mckem
 The \verb|exo-k| package is used to resample the the correlated-k opacity tables to a lower spectral resolution in order to reduce the computation time [@leconte2021].
 Combining the c-k opacities of multiple species requires mixing the distributions in $g$ space. 
 Previously, this was accomplished by taking 1000 samples of each distribution.
-This sampling process resulted in non-deterministic spectral calculations, resulting in unexpected behaviour from the nested sampling process, as the same set of parameters could result in varying log-likelihood.
+This sampling process resulted in non-deterministic spectral calculations, leading to unexpected behaviour from the nested sampling process as the same set of parameters could result in different log-likelihood.
 This has been updated to fully mix the c-k distributions.
 Considering the first species, the second species is added in, and the resulting grid is sorted. 
 The cumulative opacity grid is then mixed with the next species, a process which iterates until every species with significant opacity contributions (>0.1$\%$ of the current opacity in any bin) is mixed in to the opacity grid. 
