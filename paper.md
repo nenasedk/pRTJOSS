@@ -55,6 +55,7 @@ bibliography: paper.bib
 combining a FORTRAN back end with a Python based user interface.
 These spectra can be used as a forward model for fitting spectroscopic data using Monte Carlo techniques, commonly referred to as an atmospheric retrieval [@madu2009].
 The retrieval module of pRT combines fast pRT with the `MultiNest` [@feroz2008; @feroz2009; @feroz2013; @buchner2014] and `Ultranest` [@buchner2014; @buchner2019] nested sampling codes, allowing for fast atmospheric retrievals on a large range of different types of exoplanet data.
+Both samplers also offer MPI implementations, allowing for easy parallelisation across a large cluster.
 
 # Statement of need
 
@@ -94,7 +95,6 @@ Built in temperature profiles range from interpolated splines to physically moti
 Equilibrium and disequilibrium chemistry can be interpolated from a pre-computed grid on-the-fly.
 Chemical abundances can also be freely retrieved, with the additional possibility of using a combination of free and chemically consistent abundances.
 Cloud parametersiations range from a 'grey' continuum opacity applied at all wavelengths, to clouds parameterised as in @ackermann2001, using log-normal or @hansen1971 particle size distributions with real optical opacities for different compositions and particle shapes, and including self-scattering.
-
 Included in pRT is an option to use an adaptive pressure grid with a higher resolution around the location of the cloud base, and a lower resolution elsewhere. 
 The higher resolution grid is 10 times as fine as the remaining grid, and replaces one grid cell above and below the cloud base layer, as well as the cloud base layer cell itself. 
 This allows for more precise positioning of the cloud layers within the atmosphere. 
@@ -105,6 +105,8 @@ This results in accurate synthetic photometry, which can be compared to the valu
 
 Publication ready summary plots of best fits, temperature and abundance profiles and corner plots can be automatically generated.
 Multiple retrieval results can be combined in the plots for model intercomparisons.
+Such results have been benchmarked against other widely used retrieval codes, in particular as part of the JWST Early Release Science program (Wellbanks et al, in prep).
+
 
 # Acknowledgements
 
