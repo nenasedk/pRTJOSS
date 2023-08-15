@@ -51,8 +51,8 @@ bibliography: paper.bib
 
 # Summary
 
-`petitRADTRANS` (pRT) is a fast radiative transfer code used for computing emission and transmission spectra of exoplanet atmospheres.
-These spectra can be used as a forward model for fitting data using monte carlo techniques, commonly referred to as an atmospheric retrieval.
+`petitRADTRANS` (pRT) is a fast radiative transfer code used for computing emission and transmission spectra of exoplanet atmospheres [@molliere2019].
+These spectra can be used as a forward model for fitting data using Monte Carlo techniques, commonly referred to as an atmospheric retrieval [@madu2009].
 The retrieval module of pRT combines fast pRT with the `MultiNest` [@feroz2008; @feroz2009; @feroz2013] and `Ultranest` [@buchner2014] nested sampling codes, allowing for fast atmospheric retrievals on a large range of different types of exoplanet data.
 
 # Statement of need
