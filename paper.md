@@ -94,7 +94,7 @@ Various thermal, chemical and cloud parameterisations are available in pRT.
 Built in temperature profiles range from interpolated splines to physically motivated profiles as in @guillot2010 and @molliere2020.
 Equilibrium and disequilibrium chemistry can be interpolated from a pre-computed grid on-the-fly.
 Chemical abundances can also be freely retrieved, with the additional possibility of using a combination of free and chemically consistent abundances.
-Cloud parametersiations range from a 'grey' continuum opacity applied at all wavelengths, to clouds parameterised as in @ackermann2001, using log-normal or @hansen1971 particle size distributions with real optical opacities for different compositions and particle shapes, and including self-scattering.
+Cloud parametersiations range from a 'grey' continuum opacity applied at all wavelengths, to clouds parameterised as in @ackerman2001, using log-normal or @hansen1971 particle size distributions with real optical opacities for different compositions and particle shapes, and including self-scattering.
 Included in pRT is an option to use an adaptive pressure grid with a higher resolution around the location of the cloud base, and a lower resolution elsewhere. 
 The higher resolution grid is 10 times as fine as the remaining grid, and replaces one grid cell above and below the cloud base layer, as well as the cloud base layer cell itself. 
 This allows for more precise positioning of the cloud layers within the atmosphere. 
