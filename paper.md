@@ -51,9 +51,10 @@ bibliography: paper.bib
 
 # Summary
 
-`petitRADTRANS` (pRT) is a fast radiative transfer code used for computing emission and transmission spectra of exoplanet atmospheres [@molliere2019].
-These spectra can be used as a forward model for fitting data using Monte Carlo techniques, commonly referred to as an atmospheric retrieval [@madu2009].
-The retrieval module of pRT combines fast pRT with the `MultiNest` [@feroz2008; @feroz2009; @feroz2013] and `Ultranest` [@buchner2014] nested sampling codes, allowing for fast atmospheric retrievals on a large range of different types of exoplanet data.
+`petitRADTRANS` (pRT) is a fast radiative transfer code used for computing emission and transmission spectra of exoplanet atmospheres [@molliere2019],
+combining a FORTRAN back end with a Python based user interface.
+These spectra can be used as a forward model for fitting spectroscopic data using Monte Carlo techniques, commonly referred to as an atmospheric retrieval [@madu2009].
+The retrieval module of pRT combines fast pRT with the `MultiNest` [@feroz2008; @feroz2009; @feroz2013; @buchner2014] and `Ultranest` [@buchner2014; @buchner2019] nested sampling codes, allowing for fast atmospheric retrievals on a large range of different types of exoplanet data.
 
 # Statement of need
 
@@ -88,14 +89,22 @@ The cumulative opacity grid is then mixed with the next species, a process which
 Once complete, the resulting grid is linearly interpolated back to the 16 $g$ points at each pressure and frequency bin as required by pRT.
 This fully deterministic process stabilized the log-likelihood calculations in the retrievals, and resulted in a 5$\times$ improvement in the speed of the c-k mixing function.
 
+Various thermal, chemical and cloud parameterisations are available in pRT.
+Built in temperature profiles range from interpolated splines to physically motivated profiles as in @guillot2010 and @molliere2020.
+Equilibrium and disequilibrium chemistry can be interpolated from a pre-computed grid on-the-fly.
+Chemical abundances can also be freely retrieved, with the additional possibility of using a combination of free and chemically consistent abundances.
+Cloud parametersiations range from a 'grey' continuum opacity applied at all wavelengths, to clouds parameterised as in @ackermann2001, using log-normal or @hansen1971 particle size distributions with real optical opacities for different compositions and particle shapes, and including self-scattering.
+
 Included in pRT is an option to use an adaptive pressure grid with a higher resolution around the location of the cloud base, and a lower resolution elsewhere. 
 The higher resolution grid is 10 times as fine as the remaining grid, and replaces one grid cell above and below the cloud base layer, as well as the cloud base layer cell itself. 
 This allows for more precise positioning of the cloud layers within the atmosphere. 
 
-Finally, photometric data are fully incorporated into the retrieval process.
-As with spectroscopic data, a model is computed using a user-defined function.
-This model spectrum is then multiplied by a filter transmission profile from the SVO database using the `species` package [@stolker2020].
+Photometric data are fully incorporated into the retrieval process.
+The spectral model is multiplied by a filter transmission profile from the SVO database using the `species` package [@stolker2020].
 This results in accurate synthetic photometry, which can be compared to the values specied by the user with the `add_photometry` function.
+
+Publication ready summary plots of best fits, temperature and abundance profiles and corner plots can be automatically generated.
+Multiple retrieval results can be combined in the plots for model intercomparisons.
 
 # Acknowledgements
 
