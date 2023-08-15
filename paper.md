@@ -60,7 +60,7 @@ The retrieval module of pRT combines fast pRT with the `MultiNest` [@feroz2008; 
 
 Atmospheric retrievals are a cornerstone of exoplanet atmospheric characterisation.
 pRT is a powerful and user-friendly tool, and is unique in its abilities to characterise exoplanets in both emission and transmission.
-Various thermal structures, chemistry and cloud parameterisations and opacity calculation methods (correlated-k and line-by-line) can be combined and used to statistically identify the most favoured model for a given atmosphere.
+Various thermal structures, chemistry and cloud parameterisations and opacity calculation methods can be combined and used to statistically identify the most favoured model for a given atmosphere.
 With increasing volumes of both ground- and space-based spectra available, it is necessary for exoplanet researchers to have access to a range of characterisation tools.
 
 # petitRADTANS Retrieval Module
@@ -77,7 +77,7 @@ The resulting spectrum compared to the data with flux $\vec{F}$ and covariance $
 \end{equation}
 The second term is included in the likelihood to allow for uncertainties to vary as a free parameter during the retrieval, and penalizes overly large uncertainties.
 
-pRT can compute spectra either using line-by-line calculations, or using correlated-k tables for defining the opacities of molecular species.
+pRT can compute spectra either using line-by-line calculations, or using correlated-k (c-k) tables for defining the opacities of molecular species.
 We include up-to-date correlated-k line lists from Exomol [@tennyson2012; @mckemmish2016; @polyansky2018; @chubb2020] and HITEMP [@rothman2010], with the full set of available opacities listed in the online documentation.
 The \verb|exo-k| package is used to resample the the correlated-k opacity tables to a lower spectral resolution in order to reduce the computation time [@leconte2021].
 Combining the c-k opacities of multiple species requires mixing the distributions in $g$ space. 
