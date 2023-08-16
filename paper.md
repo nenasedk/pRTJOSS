@@ -7,7 +7,7 @@ tags:
   - atmospheres
 authors:
   - name: Evert Nasedkin
-    orcid: 0000-0000-0000-0000
+    orcid: 0000-0002-9792-3121
     equal-contrib: true
     corresponding: true
     affiliation: 1 # (Multiple affiliations must be quoted)
@@ -72,10 +72,10 @@ bibliography: paper.bib
 
 `petitRADTRANS` (pRT) is a fast radiative transfer code used for computing emission and transmission spectra of exoplanet atmospheres [@molliere2019],
 combining a FORTRAN back end with a Python based user interface.
-These spectra can be used as a forward model for fitting spectroscopic data using Monte Carlo techniques, commonly referred to as an atmospheric retrieval [@madu2009].
+It is widely used in the exoplanet community, with 160 references in the literature to date.
+The spectra calculated with pRT can be used as a forward model for fitting spectroscopic data using Monte Carlo techniques, commonly referred to as an atmospheric retrieval [@madu2009].
 Implementing such a framework in pRT is critical to remain at the forefront of exoplanet atmospheric science.
-The retrieval module of pRT combines fast pRT with the `MultiNest` [@feroz2008; @feroz2009; @feroz2013; @buchner2014] and `Ultranest` [@buchner2014; @buchner2019] nested sampling codes, allowing for fast atmospheric retrievals on a large range of different types of exoplanet data.
-Both samplers also offer MPI implementations, allowing for easy parallelisation across a large cluster.
+The new retrieval module of pRT combines fast forward modelling with nested sampling codes, allowing for atmospheric retrievals on a large range of different types of exoplanet data.
 With these new retrieval tools, it is now possible to use pRT to easily and quickly infer the atmospheric properties of exoplanets in both transmission and thermal emission.
 
 # Statement of need
@@ -87,6 +87,8 @@ With increasing volumes of both ground- and space-based spectra available, it is
 
 # petitRADTANS Retrieval Module
 The `Retrieval` module combines the `RadTrans` forward modelling class with a nested sampler via a likelihood function to perform an atmospheric retrieval.
+Both `MultiNest` [@feroz2008; @feroz2009; @feroz2013; @buchner2014] and `Ultranest` [@buchner2014; @buchner2019] samplers are available, with both offering MPI implementations that allow for easy parallelisation across a large cluster.
+
 Datasets, priors and other retrieval hyper parameters are set through the `RetrievalConfig` class, while the `models` module includes a range of complete atmospheric models that can be fit to the data.
 Users can also define their own model function, making use of temperature profiles from the `physics` module and chemistry parameterisations from the `chemistry` module. 
 
@@ -127,6 +129,7 @@ This results in accurate synthetic photometry, which can be compared to the valu
 Publication ready summary plots of best fits, temperature and abundance profiles and corner plots can be automatically generated.
 Multiple retrieval results can be combined in the plots for model intercomparisons.
 Such results have been benchmarked against other widely used retrieval codes, in particular as part of the JWST Early Release Science program (Wellbanks et al, in prep).
+
 
 
 # Acknowledgements
