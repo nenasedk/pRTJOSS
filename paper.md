@@ -106,11 +106,9 @@ We include up-to-date correlated-k line lists from Exomol [@tennyson2012; @mckem
 The \verb|exo-k| package is used to resample the the correlated-k opacity tables to a lower spectral resolution in order to reduce the computation time [@leconte2021].
 Combining the c-k opacities of multiple species requires mixing the distributions in $g$ space. 
 Previously, this was accomplished by taking 1000 samples of each distribution.
-This sampling process resulted in non-deterministic spectral calculations, leading to unexpected behaviour from the nested sampling process as the same set of parameters could result in different log-likelihood.
-This has been updated to fully mix the c-k distributions.
-Considering the first species, the second species is added in, and the resulting grid is sorted. 
-The cumulative opacity grid is then mixed with the next species, a process which iterates until every species with significant opacity contributions (>0.1$\%$ of the current opacity in any bin) is mixed in to the opacity grid. 
-Once complete, the resulting grid is linearly interpolated back to the 16 $g$ points at each pressure and frequency bin as required by pRT.
+This sampling process resulted in non-deterministic spectral calculations, leading to unexpected behaviour from the nested sampler as the same set of parameters could result in different log-likelihood.
+This has been updated to fully mix the c-k distributions, iteratively mixing in any species with a significant opacity contribution (>0.1$\%$ of the current opacity in any bin). 
+The resulting grid is linearly interpolated back to the 16 $g$ points at each pressure and frequency bin as required by pRT.
 This fully deterministic process stabilized the log-likelihood calculations in the retrievals, and resulted in a 5$\times$ improvement in the speed of the c-k mixing function.
 
 Various thermal, chemical and cloud parameterisations are available in pRT.
@@ -118,9 +116,7 @@ Built in temperature profiles range from interpolated splines to physically moti
 Equilibrium and disequilibrium chemistry can be interpolated from a pre-computed grid on-the-fly.
 Chemical abundances can also be freely retrieved, with the additional possibility of using a combination of free and chemically consistent abundances.
 Cloud parametersiations range from a 'grey' continuum opacity applied at all wavelengths, to clouds parameterised as in @ackerman2001, using log-normal or @hansen1971 particle size distributions with real optical opacities for different compositions and particle shapes, and including self-scattering.
-Included in pRT is an option to use an adaptive pressure grid with a higher resolution around the location of the cloud base, and a lower resolution elsewhere. 
-The higher resolution grid is 10 times as fine as the remaining grid, and replaces one grid cell above and below the cloud base layer, as well as the cloud base layer cell itself. 
-This allows for more precise positioning of the cloud layers within the atmosphere. 
+Included in pRT is an option to use an adaptive pressure grid with a higher resolution around the location of the cloud base, allowing for more precise positioning of the cloud layers within the atmosphere. 
 
 Photometric data are fully incorporated into the retrieval process.
 The spectral model is multiplied by a filter transmission profile from the SVO database using the `species` package [@stolker2020].
