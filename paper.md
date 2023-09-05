@@ -44,20 +44,20 @@ authors:
 affiliations:
  - name: Max Planck Institut für Astronomie, DE
    index: 1
- - name: ETH Zürich, Zürich, CH
-   index: 2
- - name: Leiden Observatory, Leiden, NL
-   index: 7
- - name: University of Washington, Seattle, USA
-   index: 8
- - name: Ludwig-Maximilians-Universität, München, DE
-   index: 3
- - name: University of Liège, Liège, BE
-   index: 4
- - name: Centre for ExoLife Sciences, Niels Bohr Institute, Copenhagen, DK
-   index: 5
- - name: Institute of Astronomy, KU Leuven, Leuven, BE
-   index: 6
+# - name: ETH Zürich, Zürich, CH
+#   index: 2
+# - name: Leiden Observatory, Leiden, NL
+#   index: 7
+# - name: University of Washington, Seattle, USA
+#   index: 8
+# - name: Ludwig-Maximilians-Universität, München, DE
+#   index: 3
+# - name: University of Liège, Liège, BE
+#   index: 4
+# - name: Centre for ExoLife Sciences, Niels Bohr Institute, Copenhagen, DK
+#   index: 5
+# - name: Institute of Astronomy, KU Leuven, Leuven, BE
+#   index: 6
 date: 14 August 2023
 bibliography: paper.bib
 
