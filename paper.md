@@ -12,32 +12,32 @@ authors:
     corresponding: true
     affiliation: 1 # (Multiple affiliations must be quoted)
   - name: Paul Mollière
-    equal-contrib: true # (This is how you can denote equal contributions between multiple authors)
+    equal-contrib: false # (This is how you can denote equal contributions between multiple authors)
     affiliation: 1
   - name: Doriann Blain
-    equal-contrib: true 
+    equal-contrib: false 
     affiliation: 1
-  - name: Eleonara Alei
-    equal-contrib: false 
-    affiliation: 2
-  - name: Karan Molaverdikhani
-    equal-contrib: false
-    affiliation: 3
-  - name: Francois Rozet
-    equal-contrib: false
-    affiliation: 4
-  - name: Aaron David Schneider
-    equal-contrib: false
-    affiliation: "5,6"
-  - name: Tomas Stolker
-    equal-contrib: false
-    affiliation: 7
-  - name: Nick Wogan
-    equal-contrib: false 
-    affiliation: 8
-  - name: Mantas Zilinskas
-    equal-contrib: false 
-    affiliation: 7
+  #- name: Eleonara Alei
+  #  equal-contrib: false 
+  #  affiliation: 2
+  #- name: Karan Molaverdikhani
+  #  equal-contrib: false
+  #  affiliation: 3
+  #- name: Francois Rozet
+  #  equal-contrib: false
+  #  affiliation: 4
+  #- name: Aaron David Schneider
+  #  equal-contrib: false
+  #  affiliation: "5,6"
+  #- name: Tomas Stolker
+  #  equal-contrib: false
+  #  affiliation: 7
+  #- name: Nick Wogan
+  #  equal-contrib: false 
+  #  affiliation: 8
+  #- name: Mantas Zilinskas
+  #  equal-contrib: false 
+  #  affiliation: 7
 
 
 
@@ -132,6 +132,6 @@ Such results have been benchmarked against other widely used retrieval codes, in
 
 # Acknowledgements
 
-We acknowledge contributions 
+We gratefully acknowledge contributions to petitRADTRANS from Eleonara Alei, Karan Molaverdikhani, Francois Rozet, Aaron David Schneider, Tomas Stolker, Nick Wogan and Mantas Zilinskas.
 
 # References
